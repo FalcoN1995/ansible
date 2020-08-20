@@ -1,0 +1,16 @@
+---
+- hosts: host1
+  gather_facts: no
+  vars: 
+    teachers: ['jkhan', 'sgjang']
+    classes: ['k8s', 'openstack', 'ansible']
+
+  tasks:
+  - name: loop test
+    debug:
+      msg: |
+              teacher is {{ item[0] }}
+              class is {{ item[1] }}
+    with_nested:
+    - "{{ teachers }}"
+    - "{{ classes }}"

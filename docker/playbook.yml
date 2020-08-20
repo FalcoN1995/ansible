@@ -1,0 +1,69 @@
+---
+- name: Install Docker in all hosts
+  hosts: all
+  tasks:
+    - name: Install Docker in ubuntu
+      block:  
+      - name: Install using the repository
+        apt: 
+          update_cache: true
+          pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+          state: latest
+      
+      
+      - name: Add Docker GPG apt Key
+        apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          state: present
+
+
+      - name: Add Docker repository
+        apt_repository:
+          repo: deb https://download.docker.com/linux/ubuntu bionic stable
+          state: present
+
+      - name: Update apt and install Docker
+        apt: 
+          update_cache: true
+          pkg:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          state: latest
+      become: true
+      when: ansible_facts.distribution == "Ubuntu"
+
+
+    - name: Install Docker in Centos
+      block: 
+      - name: Install using the repository
+        yum:
+          name: yum-utils
+          state: latest
+
+      - name: add repo 
+        yum_repository: 
+          name: docker-ce.repo
+          description: docker-ce.repo
+          file: docker-ce.repo
+          baseurl: https://download.docker.com/linux/centos/
+
+      - name: install docker 
+        yum: 
+          name: "{{ packages }}"
+        vars: 
+          packages: 
+          - docker-ce 
+          - docker-ce-cli 
+          - containerd.io
+      - name: run docker
+        service: 
+          name: docker 
+          enabled: true 
+      become: true
+      when: ansible_facts.distribution == "CentOS"

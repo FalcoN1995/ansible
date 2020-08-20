@@ -1,0 +1,14 @@
+---
+- name: gg
+  hosts: host1
+  become: true
+  gather_facts: no
+  tasks:
+  - name: Change a conf file
+    template:
+      src: test.conf.j2
+      dest: /tmp/01-vhost.conf
+  - name: restart a service
+    service:
+      name: httpd
+      state: restarted

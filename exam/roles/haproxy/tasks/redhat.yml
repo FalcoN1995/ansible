@@ -1,0 +1,25 @@
+- name: install apache
+  block: 
+  - name: install apache in centos
+    yum: 
+      name: "{{ cent_pkg }}"
+      state: latest
+  - name: copy index.html
+    copy:
+      src: centos/index.html
+      dest: /var/www/html/
+  - name: open port
+    firewalld:
+      service: "{{ firewall_port }}"
+      state: enabled
+      permanent: true
+      immediate: true
+  - name: service start
+    service: 
+      name: "{{ cent_svc_name }}"
+      state: started
+      enabled: true
+  become: true
+  when: 
+  - inventory_hostname in groups.web
+  

@@ -1,0 +1,10 @@
+---
+- name: copy no sudo password file
+  hosts: all
+  gather_facts: no
+  become: true
+  tasks: 
+  - name: copy module
+    copy:
+      src: nopasswd
+      dest: /etc/sudoers.d/

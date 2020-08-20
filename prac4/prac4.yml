@@ -1,0 +1,49 @@
+---
+- name: deploy webserver 
+  hosts: web
+  vars_files:
+  - vars/web_var.yml
+  tasks:
+  - name: Install CentOS Block Start 
+    block:
+    - name: Install the {{ pkg_name }} package
+      yum:
+        name: "{{ pkg_name }}"
+        state: latest
+    - name: Port Open
+      firewalld:
+        service: "{{ fw_name }}"
+        state: enabled
+        permanent: true
+        immediate: true
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /var/www/html
+    - name: Run apache
+      service: 
+        name: "{{ svc_name }}"
+        state: started
+        enabled: true 
+    become: true
+    when: ansible_distribution == "CentOS"
+
+
+
+  - name: Install Ubuntu Block Start 
+    block:
+    - name: Install the apache2 package
+      apt:
+        name: apache2 
+        state: latest
+    - name: ubuntu Port Open
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /var/www/html
+    become: true
+    when: ansible_distribution == "Ubuntu"

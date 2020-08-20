@@ -1,0 +1,61 @@
+---
+- name: Setup for nfs server & clients
+  gather_facts: no
+  become: true
+  hosts: nfs
+  tasks:
+    - name: install nfs
+      yum:
+        name: 
+          - nfs-utils
+          - rpcbind
+        state: latest
+    - name: make nfs_shared directory
+      file:
+        path: /mnt/nfs
+        state: directory
+        mode: 0777                          #last 7 for windows system.
+
+    - name: configure /etc/exports
+      become: yes
+      lineinfile:
+        path: /etc/exports
+        line: /mnt/nfs 192.168.56.11/24(rw,sync)
+
+    - name: open firewalld
+      firewalld:
+        service: nfs
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name : nfs service start
+      become: yes
+      service :
+        name : nfs-server
+        state : started
+        enabled: true
+
+- hosts: host3
+  gather_facts: no
+  become: true
+  tasks:
+    - apt: 
+        name: nfs-common
+        state: latest
+        update_cache: true
+
+    - name: make nfs_client directory
+      file:
+        path: /mnt/nfs
+        state: directory
+
+    - name: mount point direcotry as client
+      become: yes
+      mount:
+        name: mount
+        path: /mnt/nfs
+        src: 192.168.56.11:/mnt/nfs
+        fstype: nfs
+        opts: nfsvers=3
+        state: mounted

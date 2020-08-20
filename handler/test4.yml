@@ -1,0 +1,27 @@
+---
+- name: test handler. two 'second' notify, but one notify is chaged_when false
+  hosts: host1
+  gather_facts: no
+  tasks:
+  - name: first module
+    command: id
+    notify: 
+    - second
+
+  - name: second module
+    debug:
+      msg: in the middle
+
+  - name: third module
+    command: id
+    notify: 
+    - second
+
+  handlers:
+  - name: second
+    debug: 
+      msg: its second name handler
+  - name: first
+    debug: 
+      msg: its first name handler
+

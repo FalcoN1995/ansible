@@ -1,0 +1,8 @@
+---
+- hosts: host1
+  gather_facts: no
+  roles:
+  - role: choi
+  - role: base
+  # - base
+  #   wport: 8080

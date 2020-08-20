@@ -1,0 +1,24 @@
+---
+- name: Deploy Web Server
+  hosts: web
+  become: true
+  vars_files:
+  - vars/web_var.yml
+  tasks:
+  - name: include the tasks
+    include_tasks: tasks/include.yml
+  - name: copy index.html
+    copy: 
+      src: index.html
+      dest: /var/www/html
+
+
+- name: Deploy DB Server
+  hosts: db
+  remote_user: user
+  become: true
+  vars_files:
+  - vars/db_var.yml
+  tasks:
+  - name: include the task
+    include_tasks: tasks/include.yml

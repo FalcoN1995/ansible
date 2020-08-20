@@ -1,0 +1,5 @@
+---
+- name: Deployment webserver using one Role
+  hosts: web
+  roles: 
+  - role: final

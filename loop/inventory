@@ -1,0 +1,9 @@
+[web]
+host1
+
+[db]
+host2
+
+[service:children]
+web
+db

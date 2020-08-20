@@ -1,0 +1,12 @@
+[centos]
+host1
+host2
+
+[ubuntu]
+host3
+
+[centos:vars]
+ansible_user = user
+
+[ubuntu:vars]
+ansible_user = devops

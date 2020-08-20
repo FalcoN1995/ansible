@@ -1,0 +1,32 @@
+---
+- hosts: host1
+  gather_facts: no
+  force_handlers: true
+  tasks:
+  - name: first msg
+    debug: 
+      msg: msg1
+    changed_when: true
+    notify: 
+    - first
+
+  - name: failed module 
+    yum: 
+      name: nopkg
+    # ignore_error: true
+    #
+  - name: second msg
+    debug:
+      msg: msg2
+    notify:
+    - second
+
+
+  handlers:
+  - name: first
+    debug:
+      msg: it's first
+
+  - name: second
+    debug: 
+      msg: second 

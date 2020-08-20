@@ -1,0 +1,13 @@
+---
+- name: copy
+  hosts: host1
+  become: true
+  gather_facts: no
+  vars: 
+    var_cccr: cccr
+  tasks: 
+  - name: use shell
+    shell: sh /tmp/reg_prac.sh {{ test }}
+    register: reg1
+    changed_when: var_cccr in reg1.stdout
+

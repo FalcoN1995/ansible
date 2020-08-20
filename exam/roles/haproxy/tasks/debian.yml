@@ -1,0 +1,21 @@
+- name: web set in ubuntu
+  block: 
+  - name: install {{ ubuntu_pkg }} in ubuntu
+    apt:
+      update_cache: true
+      name: "{{ ubuntu_pkg }}"
+      state: latest
+
+  - name: copy index.html
+    copy: 
+      src: ubuntu/index.html
+      dest: /var/www/html/
+
+  - name: open port ubuntu
+    ufw: 
+      rule: allow
+      port: '80'
+      proto: 'tcp'
+  become: true
+  when: 
+  - inventory_hostname in groups.web

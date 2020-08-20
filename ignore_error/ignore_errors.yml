@@ -1,0 +1,14 @@
+---
+- hosts: host1
+  gather_facts: no
+  tasks:
+  - name: first msg
+    debug: 
+      msg: first msg
+  - name: second msg
+    yum:
+      name: first msg
+    ignore_errors: true
+  - name: third msg
+    debug: 
+      msg: third msg

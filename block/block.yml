@@ -1,0 +1,18 @@
+---
+- hosts: host1
+  gather_facts: no
+  tasks: 
+    - block:
+        - name: block msg
+          debug:
+            msg: "In BLOCK"
+          failed_when: true
+      rescue:
+        - name: rescue msg
+          debug:
+            msg: "In RESCUE"
+          failed_when: true
+      always:
+        - name: Alway msg
+          debug: 
+            msg: "Always"

@@ -1,0 +1,13 @@
+---
+- name: hostvar test
+  hosts: host1
+  tasks: 
+  - name: hostvars 
+    debug: 
+      var: hostvars
+  - name: groups
+    debug:
+      var: groups
+  - name: group_names
+    debug:
+      var: group_names

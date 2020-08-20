@@ -1,0 +1,13 @@
+---
+- hosts: host1
+  gather_facts: no
+  vars: 
+    teachers: ['jkhan', 'sgjang']
+
+  tasks:
+  - name: loop test
+    debug:
+      msg: |
+              teacher is {{ item[0] }}
+    loop: "{{ teachers }}"
+    when: item == 'jkhan'

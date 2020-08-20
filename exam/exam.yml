@@ -1,0 +1,5 @@
+---
+- name: Deployment haproxy
+  hosts: all
+  roles:
+  - role: haproxy

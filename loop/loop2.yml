@@ -1,0 +1,22 @@
+---
+- hosts: host1
+  gather_facts: no
+  vars: 
+    teachers: 
+    - jkhan
+    - sgjang
+    - ihchoi
+    classes:
+    - openstack
+    - k8s
+    - ansible
+
+  tasks:
+  - name: loop test
+    debug:
+      msg: |
+              teacher is {{ item[0] }}
+              class is {{ item[1] }}
+    with_nested:
+    - "{{ teachers }}"
+    - "{{ classes }}"

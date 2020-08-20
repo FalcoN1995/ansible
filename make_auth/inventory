@@ -1,0 +1,17 @@
+[web]
+host1
+
+[db]
+host2
+
+[ubuntu]
+host3
+
+[ubuntu:vars]
+ansible_user = devops
+
+[web:vars]
+ansible_user=user
+
+[db:vars]
+ansible_user=user

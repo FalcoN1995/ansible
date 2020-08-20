@@ -1,0 +1,21 @@
+---
+- name: prac1
+  hosts: host1
+  gather_facts: no
+  vars:
+    var: one
+  tasks: 
+    - name: shell
+      shell: "echo {{ item }}"
+      loop:
+        - one
+        - two
+      register: echo
+  
+    - name: display
+      debug:
+        msg:  | 
+          "{{ item.stdout }}"
+      loop: "{{ echo.results }}"
+      when: item.stdout == 'one'
+

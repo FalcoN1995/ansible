@@ -1,0 +1,68 @@
+---
+- name: Deploy Web Server
+  hosts: web
+  become: true
+  vars_files:
+  - vars/web_var.yml
+  tasks:
+  - name: install the {{ pkg_name }} package
+    yum: 
+      name: "{{ pkg_name }}"
+      state: latest
+    register: web_pkg_rg
+  - name: copy index.html
+    copy:
+      src: index.html
+      dest: /var/www/html/
+  - name: open port
+    firewalld:
+      service: "{{ fw_name }}"
+      permanent: true
+      state: enabled
+      immediate: true
+    register: web_fw_rg
+  - name: run apache
+    service: 
+      name: "{{ svc_name }}"
+      state: started
+      enabled: true
+    register: web_svc_rg
+  - name: Debug
+    debug: 
+      var: web_pkg_rg
+  - name: Debug web svc rg
+    debug:
+      var: web_svc_rg
+  - name: Debug web fw rg
+    debug:
+      var: web_fw_rg
+  - name: module rc
+    debug: 
+      var: ansible_facts
+
+
+- name: Deploy DB Server
+  hosts: db
+  remote_user: user
+  become: true
+  vars_files:
+  - vars/db_var.yml
+  tasks:
+  - name: install the {{ pkg_name }} package
+    yum: 
+      name: "{{ pkg_name }}"
+      state: latest
+    register: db_pkg_rg
+  - name: open port
+    firewalld:
+      service: "{{ fw_name }}"
+      state: enabled
+      permanent: true
+      immediate: true
+    register: db_fw_rg
+  - name: run {{ svc_name }} service
+    service:
+      name: "{{ svc_name }}"
+      state: started
+      enabled: true
+    register: db_svc_rg

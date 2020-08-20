@@ -1,0 +1,7 @@
+---
+# vars file for roles/web
+cent_svc_name: httpd
+firewall_port: http
+cent_pkg: httpd
+
+ubuntu_pkg: apache2

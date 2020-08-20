@@ -1,0 +1,19 @@
+- name: install the {{ pkg_name }} package
+  yum:
+    name: "{{ pkg_name }}"
+    state: latest
+  register: db_pkg_rg
+- name: open port
+  firewalld:
+    service: "{{ fw_name }}"
+    state: enabled
+    permanent: true
+    immediate: true
+  register: db_fw_rg
+- name: run {{ svc_name }} service
+  service:
+    name: "{{ svc_name }}"
+    state: started
+    enabled: true
+  register: db_svc_rg
+

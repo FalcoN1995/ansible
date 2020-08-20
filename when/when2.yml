@@ -1,0 +1,20 @@
+---
+- name: Install WEb Server in Centos and ubuntu
+  hosts: host1
+  become: true
+  vars: 
+    test: ansible
+  tasks:
+  - debug:
+      msg: this is when test
+    when:  test is not defined
+
+  - name: Include Centos variable
+    include_vars: vars/web_var.yml
+    when: pkg_name is not defined
+
+  - name: Install {{ pkg_name }} 
+    yum: 
+      name: "{{ pkg_name }}"
+      state: latest
+

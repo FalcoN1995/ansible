@@ -1,0 +1,24 @@
+---
+- name: copy vhost.conf
+  hosts: host1
+  become: true
+  gather_facts: no
+  tasks:
+  - name: copy
+    templates:
+      src: 01-vhost.conf
+      dest: /etc/httpd/conf.d/
+    notify: start_svc
+
+  - name: port open
+    firewalld:
+      port: 8080/tcp
+      state: enabled
+      permanent: true
+      immediate: true
+
+  handler:
+  - name: start_svc
+    service:
+      name: httpd
+      state: restarted

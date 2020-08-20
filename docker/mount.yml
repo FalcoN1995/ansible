@@ -1,0 +1,30 @@
+---
+- name: Install docker
+  gather_facts: No
+  hosts: host1  
+  become: true
+
+  tasks:
+  - name: Create 5G partition
+    parted:
+      device: /dev/vdb 
+      number: 1
+      state: present
+      part_end: 5GiB
+
+  - name: Format the Disk
+    filesystem:
+      fstype: xfs
+      dev: /dev/vdb1
+
+  - name: Create Directory
+    file: 
+      path: /mnt/ansible
+      state: directory
+      mode: '0755'
+      
+  - mount:
+      path: /mnt/ansible
+      src: /dev/vdb1
+      fstype: xfs
+      state: mounted

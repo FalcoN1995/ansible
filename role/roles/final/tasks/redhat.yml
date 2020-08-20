@@ -1,0 +1,33 @@
+# tasks file for roles/test
+- name: deployment webserver
+  block:
+  - name: Install {{ pkg_name }}  package
+    yum: 
+      name: "{{ pkg_name }}"
+      state: latest
+  - name: "{{ fw_port }} Port Open"
+    firewalld:
+      service: "{{ fw_port }}"
+      state: enabled
+      permanent: true
+      immediate: true
+  - name: 8080 Port Open
+    firewalld:
+      port: 8080/tcp
+      state: enabled
+      permanent: true
+      immediate: true
+  - name: Copy index.html
+    copy:
+      src: index.html
+      dest: /var/www/html
+  - name: Copy vhost.conf
+    copy:
+      src: vhost.conf
+      dest: /etc/httpd/conf.d/
+  - name: Run Apache
+    service:
+      name: "{{ svc_name }}"
+      state: started
+      enabled: true
+  become: true

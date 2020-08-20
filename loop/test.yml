@@ -1,0 +1,18 @@
+---
+- hosts: host1
+  gather_facts: no
+  vars:
+    k8s:
+      chapter1: pod
+      chapter2: rs
+    os:
+      chapter1: cloud
+      chapter2: vm
+  tasks: 
+  - name: loop test
+    debug:
+      msg: |
+              chapter1 is {{ item[0].chapter1 }}
+              chapter2 is {{ item[0].chapter2 }}
+    with_nested:
+    - "{{ k8s }}"

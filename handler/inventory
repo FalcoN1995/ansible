@@ -1,0 +1,23 @@
+[web]
+host1
+host3
+
+[centos]
+host1
+host2
+
+[ubuntu]
+host3
+
+[db]
+host2
+
+[service:children]
+web
+db
+
+[centos:vars]
+ansible_user = user
+
+[ubuntu:vars]
+ansible_user = devops

@@ -1,0 +1,23 @@
+---
+- name: copy
+  hosts: host1
+  become: true
+  gather_facts: no
+  vars: 
+    var_cccr: cccr
+  tasks: 
+  - name: download
+    get_url:
+      url: http://cccr3guro.iptime.org/reg_prac.sh
+      dest: /tmp/reg_prac.sh
+      mode: u+x
+
+  - name: use shell
+    shell: sh /tmp/reg_prac.sh {{ test }}
+    register: reg1
+
+  - name: Debug all
+    debug:
+      msg: "OK"
+    when: '"cccr" in reg1.stdout' # if you don't use vars
+    # var_cccr in reg1.stdout

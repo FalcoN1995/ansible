@@ -1,0 +1,18 @@
+---
+- name: gg
+  hosts: host1
+  become: true
+  gather_facts: no
+  tasks:
+  - name: Change a conf file
+    template:
+      src: test.conf.j2
+      dest: /tmp/01-vhost.conf
+    notify:
+    - restart_service   # if conf file changed, restart_service set 1
+
+  handlers:
+  - name: restart_service  # must be same notify. if restart_service set 1, doesn't start
+    service:
+      name: httpd
+      state: restarted
